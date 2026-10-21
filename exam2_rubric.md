@@ -14,7 +14,7 @@
 - Node runs JavaScript outside the browser (server side).
 - Useful for servers: asynchronous and event-driven (non-blocking I/O), one language for frontend and backend.
 - npm is the package manager; package.json holds project metadata, dependencies, and scripts.
-- `dependencies` are needed to run in production; `devDependencies` are only for development (testing, building).
+- `dependencies` are needed to run in production; `devDependencies` used in the development environment `npm run dev`.
 
 ---
 
@@ -28,7 +28,7 @@
 - Networks replace physically moving data; they enable instant sharing, shared resources, communication, and remote access.
 - An IP address is a unique identifier for a device or interface on a network.
 - Private addresses (10.x, 172.16-31.x, 192.168.x) are used inside local networks and are not routable on the internet; public addresses are unique on the internet and assigned by an ISP.
-- A reasonable example of each (e.g., home laptop = private, public web server = public).
+- A reasonable example of each (e.g., home or small business LAN = private, public web server = public).
 
 ---
 
@@ -40,7 +40,7 @@
 
 **Answer should include:**
 - TCP is connection-oriented, reliable, and ordered; UDP is connectionless, unreliable, faster, with lower overhead.
-- Any three reliability features: sequence numbers, ACKs, retransmission, flow control, ordering.
+- Any three reliability features: sequence numbers, ACKs, retransmission, flow control, ordering, stream-oriented.
 - UDP is preferred when speed matters more than reliability.
 - One TCP example (HTTP, email, SSH) and one UDP example (DNS, gaming, streaming, VoIP).
 
@@ -93,9 +93,11 @@
 > Explain the purpose of HTTP methods (verbs) and describe when you would use GET, POST, PUT, PATCH, and DELETE. Explain the difference between PUT and PATCH requests and when you would use each. Explain the difference between GET and POST requests, including when each should be used.
 
 **Answer should include:**
+- Methods (verbs) indicate the action to perform on a resource.
 - GET retrieves, POST creates or submits, PUT replaces an entire resource, PATCH partially updates, DELETE removes.
 - PUT replaces the whole resource; PATCH changes only the specified fields.
-- GET is safe and idempotent with no body; POST creates or changes data and carries a body.
+- GET is *safe* and *idempotent* with no body; POST creates or changes data and carries a body.
+- Mentioning *safe* and *idempotent* would be awesome.
 
 ---
 
@@ -108,7 +110,19 @@
 **Answer should include:**
 - Status codes communicate the result of a request.
 - 2xx = success, 4xx = client error, 5xx = server error.
-- One correct code from each range with when it's returned (e.g., 200 or 201; 400, 401, or 404; 500 or 503).
+- One correct code from each range with when it's returned
+  - 200 OK
+  - 201 Created
+  - 204 No content
+  - 301 Moved permanently
+  - 400 Bad request
+  - 401 Unauthorized
+  - 403 Forbidden
+  - 404 Not found
+  - 500 Internal server error
+  - 502 Bad gateway
+  - 504 Gateway timeout
+  - 503 Service unavailable
 
 ---
 
@@ -119,7 +133,7 @@
 > Describe the structure of the Request class and list the key properties it contains. Describe the structure of the Response class and list the key properties it contains. Explain why these classes are useful abstractions in web server architecture.
 
 **Answer should include:**
-- Request: method, version, headers, body, uri.
+- Request: method, path, version, headers, body
 - Response: version, code, reason, headers, body.
 - Why useful: structured, easy-to-use objects instead of raw bytes; separates HTTP parsing from application logic.
 
