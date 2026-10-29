@@ -2,7 +2,7 @@ import express from 'express';
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    res.json({ message: `Get all recipes` });
+  res.render('recipes/index');
 });
 
 router.get('/:id', (req, res) => {
@@ -40,10 +40,6 @@ router.post('/:id/delete', (req, res) => {
     const recipeId = req.params.id;
     res.json({ message: `Delete recipe ${recipeId}` });
 });
-
-/*GET /favorites - View the current user's favorite recipes
-GET /my-recipes - View the current user's own recipes
-POST /logout - Logout*/
 
 //-------------------------------------------------------
 // Authenticated (anyone)
