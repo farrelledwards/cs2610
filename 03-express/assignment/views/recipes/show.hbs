@@ -1,0 +1,75 @@
+<article class="recipe-detail">
+    <a href="/recipes" class="link-back">&larr; Back to recipes</a>
+
+    <header class="recipe-detail-header">
+        <div class="recipe-detail-image">
+            {{#if recipe.image_url}}
+                <img src="{{recipe.image_url}}" alt="{{recipe.title}}">
+            {{else}}
+                <span class="image-placeholder image-placeholder-lg" aria-hidden="true">🍽️</span>
+            {{/if}}
+        </div>
+
+        <div class="recipe-detail-info">
+            <h1>{{recipe.title}}</h1>
+            {{#if recipe.username}}
+                <p class="recipe-author">by <a href="/users/{{recipe.user_id}}">{{recipe.username}}</a>
+                {{#if recipe.created_at}}<span class="muted"> &middot; {{recipe.created_at}}</span>{{/if}}</p>
+            {{/if}}
+            {{#if recipe.description}}<p class="lead">{{recipe.description}}</p>{{/if}}
+
+            <dl class="stat-row">
+                {{#if recipe.prep_time}}
+                    <div class="stat"><dt>Prep</dt><dd>{{recipe.prep_time}} min</dd></div>
+                {{/if}}
+                {{#if recipe.cook_time}}
+                    <div class="stat"><dt>Cook</dt><dd>{{recipe.cook_time}} min</dd></div>
+                {{/if}}
+                {{#if recipe.servings}}
+                    <div class="stat"><dt>Servings</dt><dd>{{recipe.servings}}</dd></div>
+                {{/if}}
+            </dl>
+
+            <div class="action-row">
+                {{#if user}}
+                    {{#if recipe.isFavorite}}
+                        <form action="/recipes/{{recipe.id}}/unfavorite" method="POST" class="inline-form">
+                            <button type="submit" class="btn btn-favorite is-active">♥ Favorited</button>
+                        </form>
+                    {{else}}
+                        <form action="/recipes/{{recipe.id}}/favorite" method="POST" class="inline-form">
+                            <button type="submit" class="btn btn-favorite">♡ Add to Favorites</button>
+                        </form>
+                    {{/if}}
+                {{/if}}
+
+                {{#if recipe.isOwner}}
+                    <a href="/recipes/{{recipe.id}}/edit" class="btn btn-outline">Edit</a>
+                    <form action="/recipes/{{recipe.id}}/delete" method="POST" class="inline-form">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                {{/if}}
+            </div>
+        </div>
+    </header>
+
+    <div class="recipe-detail-body">
+        <section class="card">
+            <h2>Ingredients</h2>
+            {{#if recipe.ingredients}}
+                <p class="preformatted">{{recipe.ingredients}}</p>
+            {{else}}
+                <p class="muted">No ingredients listed.</p>
+            {{/if}}
+        </section>
+
+        <section class="card">
+            <h2>Instructions</h2>
+            {{#if recipe.instructions}}
+                <p class="preformatted">{{recipe.instructions}}</p>
+            {{else}}
+                <p class="muted">No instructions provided.</p>
+            {{/if}}
+        </section>
+    </div>
+</article>

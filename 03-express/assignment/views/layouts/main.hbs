@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{#if title}}{{title}} · {{/if}}Recipe Box</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="/" class="brand">
+                <span class="brand-icon" aria-hidden="true">🍳</span>
+                <span>Recipe Box</span>
+            </a>
+
+            <nav class="site-nav" aria-label="Main navigation">
+                <a href="/">Home</a>
+                <a href="/recipes">Browse Recipes</a>
+
+                {{#if user}}
+                    <a href="/my-recipes">My Recipes</a>
+                    <a href="/favorites">Favorites</a>
+                    <a href="/users/{{user.id}}" class="nav-user" title="View your profile">
+                        <span class="avatar" aria-hidden="true">👤</span>{{user.username}}
+                    </a>
+                    <form action="/logout" method="POST" class="inline-form">
+                        <button type="submit" class="btn btn-outline btn-sm">Logout</button>
+                    </form>
+                {{else}}
+                    <a href="/login">Login</a>
+                    <a href="/register" class="btn btn-primary btn-sm">Register</a>
+                {{/if}}
+            </nav>
+        </div>
+    </header>
+
+    <main class="container main-content">
+        {{#if message}}
+            <div class="alert alert-success" role="status">{{message}}</div>
+        {{/if}}
+        {{#if error}}
+            <div class="alert alert-error" role="alert">{{error}}</div>
+        {{/if}}
+
+        {{{body}}}
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <p>&copy; 2026 Recipe Box &middot; CS 2610</p>
+            <p>
+                <a href="/">Home</a> &middot;
+                <a href="/recipes">Browse Recipes</a>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>

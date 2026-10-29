@@ -1,0 +1,17 @@
+<div class="status-page">
+    <p class="status-code">🔒</p>
+    <h1>Access denied</h1>
+    {{#if user}}
+        <p class="subtitle">You don't have permission to do that.</p>
+        <div class="hero-actions">
+            <a href="/" class="btn btn-primary">Go Home</a>
+            <a href="/my-recipes" class="btn btn-outline">My Recipes</a>
+        </div>
+    {{else}}
+        <p class="subtitle">You need to be logged in to view this page.</p>
+        <div class="hero-actions">
+            <a href="/login" class="btn btn-primary">Log In</a>
+            <a href="/register" class="btn btn-outline">Register</a>
+        </div>
+    {{/if}}
+</div>

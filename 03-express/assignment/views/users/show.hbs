@@ -1,0 +1,46 @@
+<section class="profile-header card">
+    <div class="profile-avatar" aria-hidden="true">👤</div>
+    <div>
+        <h1>{{profile.username}}</h1>
+        {{#if profile.created_at}}<p class="muted">Member since {{profile.created_at}}</p>{{/if}}
+        <p class="profile-stats">
+            <strong>{{recipes.length}}</strong> recipe(s) shared
+        </p>
+    </div>
+</section>
+
+<section>
+    <div class="section-header">
+        <h2>Recipes by {{profile.username}}</h2>
+    </div>
+
+    {{#if recipes.length}}
+        <div class="recipe-grid">
+            {{#each recipes}}
+                <article class="recipe-card">
+                    <a href="/recipes/{{id}}" class="recipe-card-image">
+                        {{#if image_url}}
+                            <img src="{{image_url}}" alt="{{title}}">
+                        {{else}}
+                            <span class="image-placeholder" aria-hidden="true">🍽️</span>
+                        {{/if}}
+                    </a>
+                    <div class="recipe-card-body">
+                        <h3><a href="/recipes/{{id}}">{{title}}</a></h3>
+                        {{#if description}}<p class="recipe-card-desc">{{description}}</p>{{/if}}
+                        <div class="recipe-meta">
+                            {{#if cook_time}}<span>⏱ {{cook_time}} min</span>{{/if}}
+                            {{#if servings}}<span>🍽 Serves {{servings}}</span>{{/if}}
+                        </div>
+                    </div>
+                </article>
+            {{/each}}
+        </div>
+    {{else}}
+        <div class="empty-state">
+            <p class="empty-icon" aria-hidden="true">📖</p>
+            <h3>No recipes yet</h3>
+            <p>{{profile.username}} hasn't shared any recipes.</p>
+        </div>
+    {{/if}}
+</section>

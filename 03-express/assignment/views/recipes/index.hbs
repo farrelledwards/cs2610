@@ -1,0 +1,54 @@
+<div class="page-header">
+    <div>
+        <h1>Browse Recipes</h1>
+        <p class="subtitle">Find your next favorite meal.</p>
+    </div>
+    {{#if user}}
+        <a href="/recipes/new" class="btn btn-primary">+ New Recipe</a>
+    {{/if}}
+</div>
+
+<form action="/recipes" method="GET" class="search-bar" role="search">
+    <input type="search" name="q" value="{{query}}" placeholder="Search recipes by title or ingredient..." aria-label="Search recipes">
+    <button type="submit" class="btn btn-primary">Search</button>
+    {{#if query}}
+        <a href="/recipes" class="btn btn-ghost">Clear</a>
+    {{/if}}
+</form>
+
+{{#if recipes.length}}
+    <div class="recipe-grid">
+        {{#each recipes}}
+            <article class="recipe-card">
+                <a href="/recipes/{{id}}" class="recipe-card-image">
+                    {{#if image_url}}
+                        <img src="{{image_url}}" alt="{{title}}">
+                    {{else}}
+                        <span class="image-placeholder" aria-hidden="true">🍽️</span>
+                    {{/if}}
+                </a>
+                <div class="recipe-card-body">
+                    <h3><a href="/recipes/{{id}}">{{title}}</a></h3>
+                    {{#if description}}<p class="recipe-card-desc">{{description}}</p>{{/if}}
+                    <div class="recipe-meta">
+                        {{#if prep_time}}<span>🔪 {{prep_time}} min prep</span>{{/if}}
+                        {{#if cook_time}}<span>⏱ {{cook_time}} min cook</span>{{/if}}
+                        {{#if servings}}<span>🍽 Serves {{servings}}</span>{{/if}}
+                    </div>
+                    {{#if username}}<p class="recipe-author">by <a href="/users/{{user_id}}">{{username}}</a></p>{{/if}}
+                </div>
+            </article>
+        {{/each}}
+    </div>
+{{else}}
+    <div class="empty-state">
+        <p class="empty-icon" aria-hidden="true">🔍</p>
+        {{#if query}}
+            <h3>No recipes match "{{query}}"</h3>
+            <p>Try a different search term.</p>
+        {{else}}
+            <h3>No recipes yet</h3>
+            <p>Check back soon, or add the first one.</p>
+        {{/if}}
+    </div>
+{{/if}}

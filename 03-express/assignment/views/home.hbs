@@ -1,0 +1,54 @@
+<section class="hero">
+    <div class="hero-text">
+        <h1>Cook something great today.</h1>
+        <p>Discover, save, and share your favorite recipes with the Recipe Box community.</p>
+        <div class="hero-actions">
+            <a href="/recipes" class="btn btn-primary btn-lg">Browse Recipes</a>
+            {{#if user}}
+                <a href="/recipes/new" class="btn btn-outline btn-lg">Share a Recipe</a>
+            {{else}}
+                <a href="/register" class="btn btn-outline btn-lg">Join for Free</a>
+            {{/if}}
+        </div>
+    </div>
+    <div class="hero-art" aria-hidden="true">🥗🍝🥧</div>
+</section>
+
+<section>
+    <div class="section-header">
+        <h2>Featured Recipes</h2>
+        <a href="/recipes" class="link-arrow">See all recipes &rarr;</a>
+    </div>
+
+    {{#if recipes.length}}
+        <div class="recipe-grid">
+            {{#each recipes}}
+                <article class="recipe-card">
+                    <a href="/recipes/{{id}}" class="recipe-card-image">
+                        {{#if image_url}}
+                            <img src="{{image_url}}" alt="{{title}}">
+                        {{else}}
+                            <span class="image-placeholder" aria-hidden="true">🍽️</span>
+                        {{/if}}
+                    </a>
+                    <div class="recipe-card-body">
+                        <h3><a href="/recipes/{{id}}">{{title}}</a></h3>
+                        {{#if description}}<p class="recipe-card-desc">{{description}}</p>{{/if}}
+                        <div class="recipe-meta">
+                            {{#if cook_time}}<span>⏱ {{cook_time}} min</span>{{/if}}
+                            {{#if servings}}<span>🍽 Serves {{servings}}</span>{{/if}}
+                        </div>
+                        {{#if username}}<p class="recipe-author">by <a href="/users/{{user_id}}">{{username}}</a></p>{{/if}}
+                    </div>
+                </article>
+            {{/each}}
+        </div>
+    {{else}}
+        <div class="empty-state">
+            <p class="empty-icon" aria-hidden="true">📖</p>
+            <h3>No featured recipes yet</h3>
+            <p>Be the first to add one!</p>
+            <a href="/recipes/new" class="btn btn-primary">Add a Recipe</a>
+        </div>
+    {{/if}}
+</section>

@@ -1,0 +1,40 @@
+<div class="page-header">
+    <div>
+        <h1>My Recipes</h1>
+        <p class="subtitle">Recipes you've shared with the community.</p>
+    </div>
+    <a href="/recipes/new" class="btn btn-primary">+ New Recipe</a>
+</div>
+
+{{#if recipes.length}}
+    <div class="recipe-grid">
+        {{#each recipes}}
+            <article class="recipe-card">
+                <a href="/recipes/{{id}}" class="recipe-card-image">
+                    {{#if image_url}}
+                        <img src="{{image_url}}" alt="{{title}}">
+                    {{else}}
+                        <span class="image-placeholder" aria-hidden="true">🍽️</span>
+                    {{/if}}
+                </a>
+                <div class="recipe-card-body">
+                    <h3><a href="/recipes/{{id}}">{{title}}</a></h3>
+                    {{#if description}}<p class="recipe-card-desc">{{description}}</p>{{/if}}
+                    <div class="card-actions">
+                        <a href="/recipes/{{id}}/edit" class="btn btn-outline btn-sm">Edit</a>
+                        <form action="/recipes/{{id}}/delete" method="POST" class="inline-form">
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </article>
+        {{/each}}
+    </div>
+{{else}}
+    <div class="empty-state">
+        <p class="empty-icon" aria-hidden="true">🧑‍🍳</p>
+        <h3>You haven't shared any recipes yet</h3>
+        <p>Your creations will show up here.</p>
+        <a href="/recipes/new" class="btn btn-primary">Create Your First Recipe</a>
+    </div>
+{{/if}}

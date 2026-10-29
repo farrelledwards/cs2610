@@ -1,0 +1,39 @@
+<div class="page-header">
+    <div>
+        <h1>My Favorites</h1>
+        <p class="subtitle">Recipes you've saved for later.</p>
+    </div>
+</div>
+
+{{#if recipes.length}}
+    <div class="recipe-grid">
+        {{#each recipes}}
+            <article class="recipe-card">
+                <a href="/recipes/{{id}}" class="recipe-card-image">
+                    {{#if image_url}}
+                        <img src="{{image_url}}" alt="{{title}}">
+                    {{else}}
+                        <span class="image-placeholder" aria-hidden="true">🍽️</span>
+                    {{/if}}
+                </a>
+                <div class="recipe-card-body">
+                    <h3><a href="/recipes/{{id}}">{{title}}</a></h3>
+                    {{#if description}}<p class="recipe-card-desc">{{description}}</p>{{/if}}
+                    {{#if username}}<p class="recipe-author">by <a href="/users/{{user_id}}">{{username}}</a></p>{{/if}}
+                    <div class="card-actions">
+                        <form action="/recipes/{{id}}/unfavorite" method="POST" class="inline-form">
+                            <button type="submit" class="btn btn-favorite is-active btn-sm">♥ Remove</button>
+                        </form>
+                    </div>
+                </div>
+            </article>
+        {{/each}}
+    </div>
+{{else}}
+    <div class="empty-state">
+        <p class="empty-icon" aria-hidden="true">♡</p>
+        <h3>No favorites yet</h3>
+        <p>Tap "Add to Favorites" on any recipe to save it here.</p>
+        <a href="/recipes" class="btn btn-primary">Browse Recipes</a>
+    </div>
+{{/if}}
