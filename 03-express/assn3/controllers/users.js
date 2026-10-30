@@ -62,7 +62,7 @@ router.get('/my-recipes', async (req, res) => {
 
 router.post('/logout', async (req, res) => {
   res.clearCookie('session');
-  await database.query(`DELETE FROM sessions WHERE user_id = $1`, [req.user]);
+  await database.query(`DELETE FROM sessions WHERE user_id = $1`, [req.user.id]);
   res.redirect("/");
 });
 
