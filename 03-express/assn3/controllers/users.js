@@ -1,11 +1,17 @@
 import express from 'express';
 import database from '../db/connection.js';
+import User from '../models/users.js';
+import { Recipe } from '../models/recipes.js';
 import { setSession } from './sessions.js';
 const router = express.Router();
 
-router.get('/users/:id', (req, res) => {
+router.get('/users/:id', async (req, res) => {
+  console.log(`User id: ${req.user.id}`);
+  const recipes = await Recipe.findByUserId(req.user.id);
   res.render('users/show', {
-    user: req.user
+    user: req.user,
+    profile: req.user,
+    recipes: recipes
   });
 });
 
@@ -40,15 +46,17 @@ router.post('/register', async (req, res) => {
   res.redirect('/');
 });
 
-router.get('/favorites', (req, res) => {
+router.get('/favorites', async (req, res) => {
   res.render('favorites', {
-    user: req.user
+    user: req.user,
+    recipes: await Recipe.findByUserId(req.user.id, true)
   });
 });
 
-router.get('/my-recipes', (req, res) => {
+router.get('/my-recipes', async (req, res) => {
   res.render('my-recipes', {
-    user: req.user
+    user: req.user,
+    recipes: await Recipe.findByUserId(req.user.id)
   });
 });
 

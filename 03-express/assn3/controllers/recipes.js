@@ -1,21 +1,36 @@
 import express from 'express';
 const router = express.Router();
 
-router.get('/', (req, res) => {
-  res.render('recipes/index');
-});
+import { Recipe } from '../models/recipes.js';
 
-router.get('/:id', (req, res) => {
-    const recipeId = req.params.id;
-    res.json({ message: `Get recipe ${recipeId}` });
+router.get('/', async (req, res) => {
+  res.render('recipes/index', {
+    user: req.user,
+    recipes: await Recipe.getAll(),
+  });
 });
 
 router.get('/new', (req, res) => {
-    res.json({ message: `Get recipe form` });
+  res.render('recipes/new', {
+    user: req.user
+  });
 });
 
-router.post('', (req, res) => {
-    res.json({ message: `Post recipe` });
+router.get('/:id', async (req, res) => {
+  const recipeId = req.params.id;
+  const recipe = await Recipe.findById(req.params.id);
+  console.log(recipe);
+  res.render('recipes/show', {
+    user: req.user,
+    recipe: recipe
+  });
+});
+
+router.post('', async (req, res) => {
+  req.body.user_id = req.user.id;
+  const recipe = new Recipe(req.body);
+  await recipe.save_new();
+  res.redirect(`/recipes/${recipe.id}`);
 });
 
 //-------------------------------------------------------
@@ -24,11 +39,6 @@ router.post('', (req, res) => {
 router.get('/:id/edit', (req, res) => {
     const recipeId = req.params.id;
     res.json({ message: `Get form to edit recipe ${recipeId}` });
-});
-
-router.post('/:id', (req, res) => {
-    const recipeId = req.params.id;
-    res.json({ message: `Update recipe ${recipeId}` });
 });
 
 router.post('/:id', (req, res) => {
