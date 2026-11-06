@@ -42,18 +42,18 @@
 |🟢| Nov 6 | Lecture | 4.1 Vite Basics |
 |🟢| Nov 9 | Lecture | 4.2 React basics |
 |🟢| Nov 11 | Lecture | 4.3 React State |
-|🟡| Nov 11 | Exam 3 | |
 |🟢| Nov 13 | Lecture | |
+|🟡| Nov 13 | Exam 3 | |
 |🟢| Nov 16 | Lecture | 4.4 useEffect |
 |🟢| Nov 18 | Lecture | 4.5 SPA |
 |🟢| Nov 20 | Lecture | |
 |🟢| Nov 23 | Lecture | |
 |⚫| Nov 25-27 | Thanksgiving | |
-|🟣| Nov 30 | | 5.1 Web Sockets |
-|🟣| Dec 2 | | 5.2 LangGraph |
-|🟣| Dec 4 | | |
+|🟣| Nov 30 | Lecture | 5.1 Web Sockets |
+|🟣| Dec 2 | Lecture | 5.2 LangGraph |
+|🟣| Dec 4 | Lecture | |
 |🟢| Dec 4 | Assignment 4 | |
-|🟣| Dec 7 | | 5.3 AI Agent |
-|🟣| Dec 9 | | 5.4 Human in the loop |
+|🟣| Dec 7 | Lecture | 5.3 AI Agent |
+|🟣| Dec 9 | Lecture | 5.4 Human in the loop |
 | | Dec 11 | | |
 | | Dev 14-18 | Finals | |

@@ -1,9 +1,8 @@
 // Require the user to having logged in.
 const requireAuth = (req, res, next) => {
-  req.user = req.cookies.username;
-  req.session = req.cookies.session;
+  console.log(`${req.user} and ${req.session}`);
 
-  if (!req.username || !req.session) {
+  if (!req.user || !req.session) {
     res.redirect('/login');
   }
   else {
@@ -11,4 +10,4 @@ const requireAuth = (req, res, next) => {
   }
 };
 
-export default authMiddleware;
+export default requireAuth;
