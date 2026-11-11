@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Vanilla JS to React</title>
+  </head>
+  <body>
+    <h1>Greetings</h1>
+    <div id="root"></div>
+
+    <!-- React + Babel from a CDN, so there is no build step.
+         (Babel is what turns JSX into plain JS in the browser.) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.development.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.development.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.24.7/babel.min.js"></script>
+
+    <!-- ============ STEP 1: VANILLA JAVASCRIPT (runs as-is) ============ -->
+    <script>
+      const people = ['Ada', 'Grace', 'Alan']
+      const list = document.createElement('ul')
+
+      for (const name of people) {
+        const item = document.createElement('li')
+        item.textContent = `Hello, ${name}!`
+        list.appendChild(item)
+      }
+
+      document.getElementById('root').appendChild(list)
+    </script>
+
+    <!-- ============ STEP 2: REACT ============
+         Live: delete the vanilla <script> above, then remove the
+         "<!--" line and the "-->" line around this block. -->
+    <!--
+    <script type="text/babel">
+      function Greeting({ name, role }) {
+        return <li>Hello, {name}!</li>
+      }
+
+      function App() {
+        const people = ['Ada', 'Grace', 'Alan']
+        return (
+          <ul>
+            {people.map((name) => (
+              <Greeting key={name} name={name} />
+            ))}
+          </ul>
+        )
+      }
+
+      ReactDOM.createRoot(document.getElementById('root')).render(<App />)
+    </script>
+    -->
+  </body>
+</html>

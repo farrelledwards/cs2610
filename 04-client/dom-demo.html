@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The DOM manipulation problem</title>
+    <style>
+      body { font-family: system-ui, sans-serif; max-width: 520px; margin: 2rem auto; padding: 0 1rem; }
+      h1 span { background: #c0392b; color: white; border-radius: 999px; padding: 0 0.6rem; font-size: 1rem; vertical-align: middle; }
+      button { margin: 0 0.25rem 0.5rem 0; padding: 0.4rem 0.8rem; }
+      button:disabled { opacity: 0.4; }
+    </style>
+  </head>
+  <body>
+    <!-- The page is a tree of elements. Each piece of data is shown in several places. -->
+    <h1>Cart <span id="badge">0</span></h1>
+
+    <div>
+      <button id="add-apple">Add apple ($1)</button>
+      <button id="add-bread">Add bread ($3)</button>
+      <button id="remove-last">Remove last item</button>
+    </div>
+
+    <ul id="cart-list"></ul>
+    <p>Total: $<span id="total">0</span></p>
+    <button id="checkout" disabled>Checkout</button>
+
+    <script>
+      // The data lives here...
+      const cart = []
+
+      // ...and ALSO lives in the DOM (the <li>s, the badge, the total, the button state).
+      // Every change must be copied to every place by hand.
+
+      function addItem(name, price) {
+        cart.push({ name, price })
+
+        // 1. Add a row to the list
+        const li = document.createElement('li')
+        li.textContent = `${name} - $${price}`
+        document.querySelector('#cart-list').appendChild(li)
+
+        // 2. Update the badge
+        document.querySelector('#badge').textContent = cart.length
+
+        // 3. Update the total
+        const total = cart.reduce((sum, item) => sum + item.price, 0)
+        document.querySelector('#total').textContent = total
+
+        // 4. Enable checkout
+        document.querySelector('#checkout').disabled = false
+      }
+
+      function removeLast() {
+        if (cart.length === 0) return
+        cart.pop()
+
+        // 1. Remove the last row
+        document.querySelector('#cart-list').lastElementChild.remove()
+
+        // 3. Update the total
+        const total = cart.reduce((sum, item) => sum + item.price, 0)
+        document.querySelector('#total').textContent = total
+
+        // BUG: we forgot step 2 (badge) and step 4 (disable checkout when empty).
+        // Nothing warns us. The screen now disagrees with the data.
+      }
+
+      document.querySelector('#add-apple').addEventListener('click', () => addItem('Apple', 1))
+      document.querySelector('#add-bread').addEventListener('click', () => addItem('Bread', 3))
+      document.querySelector('#remove-last').addEventListener('click', removeLast)
+
+      /* ---------- Try these in the browser console to "search" the DOM ----------
+
+      document.querySelector('#badge')            // first match for a CSS selector
+      document.getElementById('total')            // one element by id
+      document.querySelectorAll('#cart-list li')  // every row, as a NodeList
+      document.querySelector('#cart-list').children.length
+      document.querySelector('#badge').textContent  // read what the screen says
+      cart.length                                   // read what the data says
+
+      Add 2 items, remove both, then compare the last two lines above:
+      the data says 0, the badge still says 2, and Checkout is still enabled.
+      -------------------------------------------------------------------------- */
+    </script>
+  </body>
+</html>

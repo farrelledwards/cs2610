@@ -1,13 +1,12 @@
 // server.js (development: serve HTML that loads JS from Vite)
 import express from 'express'
-import { create } from 'express-handlebars'
+import { engine } from 'express-handlebars'
 
 const app = express()
 const PORT = 3000
 const VITE_ORIGIN = 'http://localhost:5173'
 
-const hbs = create({ defaultLayout: false })
-app.engine('handlebars', hbs.engine)
+app.engine('handlebars', engine({ defaultLayout: false }));
 app.set('view engine', 'handlebars')
 app.set('views', 'views')
 

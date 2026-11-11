@@ -40,6 +40,7 @@
   - Browswer can't get into node_modules
   - Doesn't know anything about npm imports
 - Hundreds of files
+- Broadcast my IP
 
 ## 4. Need
 
@@ -53,7 +54,7 @@
   - `build`: Rollup bundle into `dist` (HTML + hashed JS/CSS)
 - Hot Module Replacement
 
-## 4. Hands-On (0:22-0:37)
+## 4. Hands-On
 
 ```shell
   npm create vite@latest my-app -- --template react --no-interactive
