@@ -8,3 +8,6 @@
   - Uml diagram 
   - Language around comments
   - Break it up into two assignments
+- Assignment 3
+  - Remove mobile friendly requirement
+  - remove video requirement

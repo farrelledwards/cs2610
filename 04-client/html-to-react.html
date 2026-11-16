@@ -14,24 +14,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.development.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.24.7/babel.min.js"></script>
 
-    <!-- ============ STEP 1: VANILLA JAVASCRIPT (runs as-is) ============ -->
-    <script>
-      const people = ['Ada', 'Grace', 'Alan']
-      const list = document.createElement('ul')
-
-      for (const name of people) {
-        const item = document.createElement('li')
-        item.textContent = `Hello, ${name}!`
-        list.appendChild(item)
-      }
-
-      document.getElementById('root').appendChild(list)
-    </script>
-
-    <!-- ============ STEP 2: REACT ============
-         Live: delete the vanilla <script> above, then remove the
-         "<!--" line and the "-->" line around this block. -->
-    <!--
     <script type="text/babel">
       function Greeting({ name, role }) {
         return <li>Hello, {name}!</li>
@@ -50,6 +32,5 @@
 
       ReactDOM.createRoot(document.getElementById('root')).render(<App />)
     </script>
-    -->
   </body>
 </html>
