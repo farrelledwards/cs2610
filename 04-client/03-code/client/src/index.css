@@ -146,3 +146,22 @@ body {
   border-radius: 4px;
   margin-bottom: 1rem;
 }
+
+/* Quotes */
+.quote-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  text-align: left;
+}
+
+.quote-text {
+  font-size: 1.1rem;
+}
+
+.quote-author {
+  color: #777;
+  margin-bottom: 0.5rem;
+}

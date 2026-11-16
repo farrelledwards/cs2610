@@ -6,6 +6,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { create } from "express-handlebars";
 import { loadUser } from "./middleware/auth.js";
+import quoteRouter from "./controllers/quotes.js";
 
 import authController from "./controllers/auth.js";
 
@@ -29,6 +30,7 @@ app.use(loadUser);
 
 // API Routes
 app.use("/api/auth", authController);
+app.use("/api/quotes", quoteRouter);
 
 // Serve the React app
 if (process.env.NODE_ENV === "production") {

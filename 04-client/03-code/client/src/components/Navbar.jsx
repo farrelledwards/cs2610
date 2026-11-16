@@ -24,6 +24,7 @@ function Navbar() {
       {!isAuthPage && (
         <div className="navbar-links">
           <Link to="/">Home</Link>
+          <Link to="/quotes">Quotes</Link>
           {user ? (
             <>
               <span className="navbar-user">Hi, {user.username}</span>

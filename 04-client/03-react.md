@@ -5,6 +5,16 @@
 **Modules:** 4
 
 
+## XML
+
+From: https://github.com/react/jsx
+
+`JSX is an XML-like syntax extension to ECMAScript without any defined semantics.`
+
+Further
+
+`This specification does not attempt to comply with any XML or HTML specification. JSX is designed as an ECMAScript feature and the similarity to XML is only for familiarity.`
+
 ## The path
 
 1. The browser asks Express (port 3000) for `/quotes`. 
@@ -142,6 +152,27 @@ useEffect(() => {
 
 if (loading) {
   return <p>Loading quotes...</p>;
+}
+```
+
+Last use of loading, useEffect and useState
+
+```js
+function UserProfile({ userId }) {
+  const [user, setUser] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    setLoading(true)
+    fetch(`/api/users/${userId}`)
+      .then((res) => res.json())
+      .then((data) => setUser(data))
+      .finally(() => setLoading(false))
+  }, [userId])
+
+  if (loading) return <p>Loading...</p>
+  if (!user) return <p>No user found.</p>
+  return <div>{user.name}</div>
 }
 ```
 
