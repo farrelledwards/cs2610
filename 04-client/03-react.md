@@ -155,29 +155,6 @@ if (loading) {
 }
 ```
 
-Last use of loading, useEffect and useState
-
-```js
-function UserProfile({ userId }) {
-  const [user, setUser] = useState(null)
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    setLoading(true)
-    fetch(`/api/users/${userId}`)
-      .then((res) => res.json())
-      .then((data) => setUser(data))
-      .finally(() => setLoading(false))
-  }, [userId])
-
-  if (loading) return <p>Loading...</p>
-  if (!user) return <p>No user found.</p>
-  return <div>{user.name}</div>
-}
-```
-
-**Break it on purpose.** Remove the `setTimeout` first, so the endpoint is fast again. Ask: "What happens if I delete the `[]`?" Delete it and look at the Network tab. In testing this fired about 500 requests in two seconds: with no dependency array the effect runs after every render, and `setQuotes` gives a new array each time, which triggers another render. Put the `[]` back right away and close the tab so it stops hammering the server.
-
 ## 4. Component with props
 
 **Do 1:** Replace the `<pre>` with markup written inline in the map. Paste the prepared `.quote-card` styles into `index.css` first (they are in the patch).
@@ -251,6 +228,8 @@ Styles to paste at the end of `index.css` before segment 4:
 This state will be for each component.
 
 **Do:** Add a Like button to `QuoteCard.jsx`:
+
+#### Sending function into setter, the function will call it with the current value.
 
 ```jsx
 import { useState } from "react";
@@ -354,13 +333,44 @@ function Home() {
 export default Home;
 ```
 
-Two details to say out loud. The hook is called above the `if (!user) return null`, because hooks must run on every render in the same order. And `quotes.length > 0 &&` guards the first render, when the list is still empty and `quotes[0]` would be `undefined`.
+## 7. Persist the likes
 
-## 7. Trace it and exit (0:45-0:50)
+Server: 
 
-**Do:** Reload `/quotes` with the Network tab open and walk the board path again, one request at a time:
+```js
+ router.post("/:id/likes", (req, res) => {
+   const id = Number(req.params.id);
+   const quote = quotes.find((q) => q.id === id);
+   if (!quote) 
+       return res.status(404).json({ error: "Quote not found" });
+   quote.likes += 1;
+   res.json({ quote });
+ });
+```
 
-## 8. Extra
+QuoteCard.jsx:
 
-**TODO:**  Add a `year` field to each quote in `quotes.js` and show it on the card.
+```js
+ export function QuoteCard({ id, text, author, likes: initialLikes }) {
+   const [likes, setLikes] = useState(initialLikes);
+
+   async function handleLike() {
+     const res = await fetch(`/api/quotes/${id}/likes`, { method: "POST" });
+     const data = await res.json();
+     setLikes(data.quote.likes);
+   }
+   
+   ...
+   
+   <button className="btn btn-primary" onClick={handleLike}>Likes:
+ {likes}</button>
+```
+
+Then in the two pages:  Quotes.jsx and Home.jsx:
+
+```js
+<QuoteCard key={quote.id} id={quote.id}
+ likes={quote.likes} text={quote.text} author={quote.author} />
+```
+
 
