@@ -1,14 +1,9 @@
 import { useState, useEffect } from "react";
+import { useQuotes } from "../hooks/useQuotes.js"
 import QuoteCard from "../components/QuoteCard.jsx";
 
 export function Quotes() {
-  const [quotes, setQuotes] = useState([]);
-
-  useEffect(() => {
-    fetch("/api/quotes")
-      .then((res) => res.json())
-      .then((data) => setQuotes(data.quotes));
-  }, []);
+  const quotes = useQuotes();
 
   return (
     <div>
