@@ -23,16 +23,12 @@ if ! command -v npm >/dev/null 2>&1; then
   exit 1
 fi
 
-# --- Git remote setup ---
-# This project is a template. Rename the cloned 'origin' to 'upstream' so the
-# developer can add their own 'origin' for their new repo. Idempotent: if
-# 'upstream' already exists (re-run), leave the remotes alone.
-if git rev-parse --git-dir >/dev/null 2>&1; then
-  if git remote get-url upstream >/dev/null 2>&1; then
-    echo "==> Git remote 'upstream' already exists; skipping rename."
-  elif git remote get-url origin >/dev/null 2>&1; then
-    echo "==> Renaming git remote 'origin' to 'upstream'..."
-    git remote rename origin upstream
+# Confirm before clobbering an existing .env
+if [[ -f .env ]]; then
+  read -rp ".env already exists. Overwrite? [y/N]: " OVERWRITE
+  if [[ ! "$OVERWRITE" =~ ^[Yy]$ ]]; then
+    echo "Aborted."
+    exit 1
   fi
 fi
 
@@ -64,15 +60,6 @@ DB_HOST=${DB_HOST:-localhost}
 
 read -rp "Database port [5432]: " DB_PORT
 DB_PORT=${DB_PORT:-5432}
-
-# Confirm before clobbering an existing .env
-if [[ -f .env ]]; then
-  read -rp ".env already exists. Overwrite? [y/N]: " OVERWRITE
-  if [[ ! "$OVERWRITE" =~ ^[Yy]$ ]]; then
-    echo "Aborted."
-    exit 1
-  fi
-fi
 
 # --- Detect a working way to connect as a Postgres superuser ---
 # Strategies, in order of preference:
@@ -131,19 +118,34 @@ npm install
 echo
 echo "==> Creating PostgreSQL user '$DB_USER' and database '$DB_NAME'..."
 
-# Escape single quotes in the password for the SQL string literal
+# Escape single quotes for SQL string literals. Password statements go in on
+# stdin (not -c) so the password doesn't show up in the process list.
 ESCAPED_PASSWORD=${DB_PASSWORD//\'/\'\'}
 
-"${PSQL_SUPER[@]}" -v ON_ERROR_STOP=1 <<SQL
-CREATE USER "$DB_USER" WITH PASSWORD '$ESCAPED_PASSWORD';
-CREATE DATABASE "$DB_NAME" WITH OWNER "$DB_USER";
-SQL
+ESCAPED_USER=${DB_USER//\'/\'\'}
+ESCAPED_DBNAME=${DB_NAME//\'/\'\'}
+
+if [[ "$("${PSQL_SUPER[@]}" -tAc "SELECT 1 FROM pg_roles WHERE rolname = '$ESCAPED_USER'")" == "1" ]]; then
+  echo "    User '$DB_USER' already exists; updating its password."
+  "${PSQL_SUPER[@]}" -v ON_ERROR_STOP=1 <<< "ALTER USER \"$DB_USER\" WITH PASSWORD '$ESCAPED_PASSWORD';"
+else
+  "${PSQL_SUPER[@]}" -v ON_ERROR_STOP=1 <<< "CREATE USER \"$DB_USER\" WITH PASSWORD '$ESCAPED_PASSWORD';"
+fi
+
+if [[ "$("${PSQL_SUPER[@]}" -tAc "SELECT 1 FROM pg_database WHERE datname = '$ESCAPED_DBNAME'")" == "1" ]]; then
+  echo "    Database '$DB_NAME' already exists; leaving it in place."
+else
+  "${PSQL_SUPER[@]}" -v ON_ERROR_STOP=1 -c "CREATE DATABASE \"$DB_NAME\" WITH OWNER \"$DB_USER\";"
+fi
 
 # --- 4. Write .env ---
 echo
 echo "==> Writing .env..."
+# URL-encode the user and password so characters like @ : / # don't break the URL.
+ENC_USER=$(V="$DB_USER" node -e 'process.stdout.write(encodeURIComponent(process.env.V))')
+ENC_PASSWORD=$(V="$DB_PASSWORD" node -e 'process.stdout.write(encodeURIComponent(process.env.V))')
 cat > .env <<ENV
-DATABASE_URL=postgres://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME
+DATABASE_URL=postgres://$ENC_USER:$ENC_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME
 PORT=3000
 VITE_ORIGIN=http://localhost:5173
 ENV
@@ -156,11 +158,6 @@ npm run migrate
 echo
 echo "Setup complete!"
 echo
-if git rev-parse --git-dir >/dev/null 2>&1 && ! git remote get-url origin >/dev/null 2>&1; then
-  echo "Don't forget to point 'origin' at your new repo:"
-  echo "  git remote add origin <your-repo-url>"
-  echo
-fi
 echo "Start the dev servers in two terminals:"
 echo "  npm run server-dev"
 echo "  npm run client-dev"
